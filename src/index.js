@@ -13,20 +13,35 @@ class Square extends React.Component {
 
   render() {
     return (
-      //When clicked, set 'value' parameter of 'state' to 'X'.
-      <button className="square" onClick={() => this.setState({value: 'X'})}>
-        {/*Displat the 'value' parameter in 'state'.*/}
-        {this.state.value}
+      //When clicked, use the onClick() function passed in 'props' from Board.
+      <button className="square" onClick={() => this.props.onClick()}>
+        {/*Displat the 'value' parameter passed in 'props'.*/}
+        {this.props.value}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
-  /*This function returns a React Component called 'Square', assigning the argument 'i' to the 'value' parameter
-   of the Square Component.*/
+  constructor() {
+    super();
+    this.state = {
+      //Define a 'squares' array with 9 entries, each set to null.
+      squares: Array(9).fill(null),
+    };
+  }
+
+  handleClick(i) {
+    const squares = this.state.squares.slice(); //Grab 'squares' array in Board 'state'.
+    squares[i] = 'X'; //Set the matching square index to 'X'.
+    this.setState({squares: squares}); //Update 'squares' array in Board's 'state'.
+  }
+
+  /*Return the React Component called 'Square'.
+   When returned, pass Square it's matching value in the 'squares' array of 'state' of Board.
+   Also, pass it a function to update the 'squares' array in the 'state' of Board.*/
   renderSquare(i) {
-    return <Square value={i}/>;
+    return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)}/>;
   }
 
   render() {
