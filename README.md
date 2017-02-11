@@ -68,8 +68,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 - [Something Missing?](#something-missing)
 
 ##Project Dependencies
-In order to build this project, you must have [_**NodeJS**_](https://nodejs.org/) installed, along with the 
-[_**npm**_](https://docs.npmjs.com/) (can be included when installing NodeJS).
+In order to build this project, you must have [_**NodeJS**_](https://nodejs.org/) installed, along with [_**npm**_](https://docs.npmjs.com/) (can be included when installing NodeJS).
 
 ##Project Installation
 
