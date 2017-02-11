@@ -8,6 +8,8 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 ## Table of Contents
 
+- [Project Dependencies](#project-dependencies)(Added by repo owner)
+- [Project Installation](#project-installation)(Added by repo owner)
 - [Updating to New Releases](#updating-to-new-releases)
 - [Sending Feedback](#sending-feedback)
 - [Folder Structure](#folder-structure)
@@ -64,6 +66,33 @@ You can find the most recent version of this guide [here](https://github.com/fac
   - [`npm test` hangs on macOS Sierra](#npm-test-hangs-on-macos-sierra)
   - [`npm run build` silently fails](#npm-run-build-silently-fails)
 - [Something Missing?](#something-missing)
+
+##Project Dependencies
+In order to build this project, you must have [_**NodeJS**_](https://nodejs.org/) installed, along with the 
+[_**npm**_](https://docs.npmjs.com/) (can be included when installing NodeJS).
+
+##Project Installation
+
+#### 1) Pull down the project into a directory.
+`cd` into the directory where you'll keep the project and run the following command...
+```
+git clone https://github.com/readTheLine/TicTacToe-React-Tutorial.git
+```
+
+#### 2) Download the dependencies.
+Next, `cd` into the project directory and run...
+```
+npm install
+```
+
+#### 3) Run the app
+While in the project directory, run...
+```
+npm start
+```
+
+#### 4.) You're done!
+The app will now be running and you're free to fiddle around with everything.
 
 ## Updating to New Releases
 
