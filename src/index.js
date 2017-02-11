@@ -2,24 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-class Square extends React.Component {
-  constructor() {
-    super(); // You need to explicitly call super() when defining the constructor of a subclass.
-    this.state = {
-      //Set the 'value' parameter of 'state' to null on object creation.
-      value: null,
-    };
-  }
-
-  render() {
-    return (
-      //When clicked, use the onClick() function passed in 'props' from Board.
-      <button className="square" onClick={() => this.props.onClick()}>
-        {/*Displat the 'value' parameter passed in 'props'.*/}
-        {this.props.value}
-      </button>
-    );
-  }
+/*
+ This is a Stateless Functional Component.
+ It exists purely to return something that requires no state.
+ */
+function Square(props) {
+  return (
+    //When clicked, use the onClick() function passed in 'props' from Board.
+    <button className="square" onClick={() => props.onClick()}>
+      {/*Display the 'value' parameter passed in 'props'.*/}
+      {props.value}
+    </button>
+  );
 }
 
 class Board extends React.Component {
