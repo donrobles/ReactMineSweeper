@@ -28,6 +28,9 @@ class Board extends React.Component {
 
   handleClick(i) {
     const squares = this.state.squares.slice(); //Copy 'squares' array in Board's 'state'.
+    if (calculateWinner(squares) || squares[i]) {
+      return; //Ignore click if there's a winning line.
+    }
     squares[i] = this.state.xIsNext ? "X" : "O"; //If it's X's turn, place an X, else place an O.
     this.setState({
       squares: squares, //Update 'squares' array in Board's 'state'.
@@ -43,8 +46,14 @@ class Board extends React.Component {
   }
 
   render() {
-    //Display which player is next based Board's state variable, 'xIsNext'.
-    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    //Check if a winning line exists.
+    const winner = calculateWinner(this.state.squares);
+    let status;
+    if (winner) {
+      status = 'Winner: ' + winner;
+    } else {
+      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    }
     return (
       <div>
         <div className="status">{status}</div>
