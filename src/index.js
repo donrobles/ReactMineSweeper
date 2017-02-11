@@ -5,16 +5,20 @@ import "./index.css";
 class Square extends React.Component {
   render() {
     return (
+
       <button className="square">
-        {/* TODO */}
+        {/*Read the value of the 'value' parameter of the 'props'.*/}
+        {this.props.value}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
+  /*This function returns a React Component called 'Square', assigning the argument 'i' to the 'value' parameter
+   of the Square Component.*/
   renderSquare(i) {
-    return <Square />;
+    return <Square value={i}/>;
   }
 
   render() {
@@ -23,6 +27,7 @@ class Board extends React.Component {
       <div>
         <div className="status">{status}</div>
         <div className="board-row">
+          {/*Call the 'renderSquare' function, passing a value parameter.*/}
           {this.renderSquare(0)}
           {this.renderSquare(1)}
           {this.renderSquare(2)}
