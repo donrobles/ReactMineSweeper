@@ -73,30 +73,29 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor() {
     super();
-    let randMines = this.randomMines();
-    let orgField = Array(25).fill(null);
+    let mines = this.mineSquares();
+    let fullField = Array(25).fill(null);
 
-    for (let i = 0; i < randMines.length; i++) {
-      orgField[randMines[i]] = "X";
+    for (let i = 0; i < mines.length; i++) {
+      fullField[mines[i]] = "X";
     }
     this.state = {
       //An array for 'squares' arrays.
       history: [{
-        squares: orgField
+        squares: fullField
       }],
       xIsNext: true,
       stepNumber: 0,
     };
   }
 
-  randomMines() {
-    debugger;
+  mineSquares() {
     let picked = 0, pick = 0;
-    let randPicks = Array(3).fill(null);
+    let randPicks = Array(3).fill(null); //Create empty array
     while (picked < 3) {
-      pick = (Math.floor(Math.random() * 25));
-      if (!randPicks.includes(pick)) {
-        randPicks[picked] = pick;
+      pick = (Math.floor(Math.random() * 25)); //Pick a random number
+      if (!randPicks.includes(pick)) { //Make sure the random number hasn't been picked.
+        randPicks[picked] = pick; //Add random number to array of random numbers picked.
         picked++;
       }
     }
