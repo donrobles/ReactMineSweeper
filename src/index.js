@@ -26,44 +26,32 @@ class Board extends React.Component {
     return <Square value={squares[i]} onClick={() => this.props.onClick(i)}/>;
   }
 
+  renderRow(row) {
+    debugger;
+    const field = this.props.field;
+    const currentRow = field[row];
+    for (let i = 0; i < currentRow.length; i++) {
+      this.renderSquare(i);
+    }
+  }
+
   render() {
     return (
       <div>
         <div className="board-row">
-          {/*Call the 'renderSquare' function, passing a value parameter.*/}
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
+          {(this.renderRow(0))}
         </div>
         <div className="board-row">
-          {this.renderSquare(5)}
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-          {this.renderSquare(9)}
+          {(this.renderRow(1))}
         </div>
         <div className="board-row">
-          {this.renderSquare(10)}
-          {this.renderSquare(11)}
-          {this.renderSquare(12)}
-          {this.renderSquare(13)}
-          {this.renderSquare(14)}
+          {(this.renderRow(2))}
         </div>
         <div className="board-row">
-          {this.renderSquare(15)}
-          {this.renderSquare(16)}
-          {this.renderSquare(17)}
-          {this.renderSquare(18)}
-          {this.renderSquare(19)}
+          {(this.renderRow(3))}
         </div>
         <div className="board-row">
-          {this.renderSquare(20)}
-          {this.renderSquare(21)}
-          {this.renderSquare(22)}
-          {this.renderSquare(23)}
-          {this.renderSquare(24)}
+          {(this.renderRow(4))}
         </div>
       </div>
     );
@@ -73,29 +61,40 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor() {
     super();
-    let mines = this.mineSquares();
-    let fullField = Array(25).fill(null);
-
-    for (let i = 0; i < mines.length; i++) {
-      fullField[mines[i]] = "X";
+    //Create empty 5x5 array.
+    //NOTE: The array must be created this way because there must be a new array for each row.
+    let fullField = [
+      Array(5).fill(null),
+      Array(5).fill(null),
+      Array(5).fill(null),
+      Array(5).fill(null),
+      Array(5).fill(null)
+    ];
+    let mineCoordinates = this.mineCoords(), xyCoordinates;
+    debugger;
+    if (fullField[0] === fullField[4]) {
+      console.log("True");
     }
+    for (let j = 0; j < mineCoordinates.length; j++) {
+      xyCoordinates = mineCoordinates[j].split(",");
+      let x = xyCoordinates[0];
+      let y = xyCoordinates[1];
+      fullField[x][y] = "X";
+    }
+
     this.state = {
-      //An array for 'squares' arrays.
-      history: [{
-        squares: fullField
-      }],
-      xIsNext: true,
-      stepNumber: 0,
+      field: fullField,
     };
   }
 
-  mineSquares() {
-    let picked = 0, pick = 0;
+  mineCoords() {
     let randPicks = Array(3).fill(null); //Create empty array
+    let picked = 0;
+    let xy = "";
     while (picked < 3) {
-      pick = (Math.floor(Math.random() * 25)); //Pick a random number
-      if (!randPicks.includes(pick)) { //Make sure the random number hasn't been picked.
-        randPicks[picked] = pick; //Add random number to array of random numbers picked.
+      xy = (Math.floor(Math.random() * 5)) + "," + (Math.floor(Math.random() * 5));
+      if (!randPicks.includes(xy)) { //Make sure the random number hasn't been picked.
+        randPicks[picked] = xy; //Add random number to array of random numbers picked.
         picked++;
       }
     }
@@ -103,65 +102,22 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1); //Grab the history in Game's 'state'.
-    const current = history[history.length - 1]; //Grab the current array in 'history'.
-    const squares = current.squares.slice(); //Copy the 'current' squares array.
-    if (calculateWinner(squares) || squares[i]) {
-      return; //Ignore click if there's a winning line.
-    }
-    //Store an X or O based on who's turn it is.
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      //Add the new 'squares' array to the 'history' array.
-      history: history.concat([{
-        squares: squares
-      }]),
-      xIsNext: !this.state.xIsNext, //Flip the xIsNext boolean to it's opposite.
-      stepNumber: history.length
-    });
-  }
 
-  jumpTo(step) {
-    this.setState({
-      stepNumber: step,
-      xIsNext: (step % 2) ? false : true,
-    });
   }
 
   render() {
-    const history = this.state.history; //Grab the Game's 'history' array.
-    const current = history[this.state.stepNumber]; //Set the latest array in 'history' based on what step we're on.
-    const winner = calculateWinner(current.squares); //Check if there's a winner.
-
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Move #' + move :
-        'Game start';
-      return (
-        <li key={move}>
-          <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
-        </li>
-      );
-    });
-
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-    } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-    }
-
+    const field = this.state.field;
     return (
       <div className="game">
         <div className="game-board">
           <Board
-            squares={current.squares}
+            field={field}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
         <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+          <div>{{/*status*/}}</div>
+          <ol>{{/*moves*/}}</ol>
         </div>
       </div>
     );
