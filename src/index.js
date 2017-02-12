@@ -27,7 +27,13 @@ class Row extends React.Component {
   render() {
     let row = this.props.row;
     return (
-      this.renderSquare("x")
+      <div className="board-row">
+        {this.renderSquare(row[0])}
+        {this.renderSquare(row[1])}
+        {this.renderSquare(row[2])}
+        {this.renderSquare(row[3])}
+        {this.renderSquare(row[4])}
+      </div>
     )
   }
 }
@@ -39,21 +45,11 @@ class Board extends React.Component {
     let field = this.props.field;
     return (
       <div className="board">
-        <div className="board-row">
-          <Row row={field[0]} onClick={this.props.onClick()}/>
-        </div>
-        <div className="board-row">
-          <Row row={field[1]} onClick={this.props.onClick()}/>
-        </div>
-        <div className="board-row">
-          <Row row={field[2]} onClick={this.props.onClick()}/>
-        </div>
-        <div className="board-row">
-          <Row row={field[3]} onClick={this.props.onClick()}/>
-        </div>
-        <div className="board-row">
-          <Row row={field[4]} onClick={this.props.onClick()}/>
-        </div>
+        <Row row={field[0]} onClick={this.props.onClick()}/>
+        <Row row={field[1]} onClick={this.props.onClick()}/>
+        <Row row={field[2]} onClick={this.props.onClick()}/>
+        <Row row={field[3]} onClick={this.props.onClick()}/>
+        <Row row={field[4]} onClick={this.props.onClick()}/>
       </div>
     );
   }
@@ -110,10 +106,6 @@ class Game extends React.Component {
             field={field}
             onClick={(i) => this.handleClick(i)}
           />
-        </div>
-        <div className="game-info">
-          <div>{{/*status*/}}</div>
-          <ol>{{/*moves*/}}</ol>
         </div>
       </div>
     );
