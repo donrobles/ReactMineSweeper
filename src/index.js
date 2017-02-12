@@ -34,16 +34,36 @@ class Board extends React.Component {
           {this.renderSquare(0)}
           {this.renderSquare(1)}
           {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
           {this.renderSquare(3)}
           {this.renderSquare(4)}
-          {this.renderSquare(5)}
         </div>
         <div className="board-row">
+          {this.renderSquare(5)}
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
+          {this.renderSquare(9)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(10)}
+          {this.renderSquare(11)}
+          {this.renderSquare(12)}
+          {this.renderSquare(13)}
+          {this.renderSquare(14)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(15)}
+          {this.renderSquare(16)}
+          {this.renderSquare(17)}
+          {this.renderSquare(18)}
+          {this.renderSquare(19)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(20)}
+          {this.renderSquare(21)}
+          {this.renderSquare(22)}
+          {this.renderSquare(23)}
+          {this.renderSquare(24)}
         </div>
       </div>
     );
@@ -53,14 +73,34 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor() {
     super();
+    let randMines = this.randomMines();
+    let orgField = Array(25).fill(null);
+
+    for (let i = 0; i < randMines.length; i++) {
+      orgField[randMines[i]] = "X";
+    }
     this.state = {
       //An array for 'squares' arrays.
       history: [{
-        squares: Array(9).fill(null)
+        squares: orgField
       }],
       xIsNext: true,
       stepNumber: 0,
     };
+  }
+
+  randomMines() {
+    debugger;
+    let picked = 0, pick = 0;
+    let randPicks = Array(3).fill(null);
+    while (picked < 3) {
+      pick = (Math.floor(Math.random() * 25));
+      if (!randPicks.includes(pick)) {
+        randPicks[picked] = pick;
+        picked++;
+      }
+    }
+    return randPicks;
   }
 
   handleClick(i) {
