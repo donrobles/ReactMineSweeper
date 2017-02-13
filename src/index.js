@@ -81,13 +81,51 @@ class Game extends React.Component {
   }
 
   mineIndicators(fullField, mineCoordinates) {
-    let xyCoordinates, x, y;
-    let rowColEnd = fullField.length;
-    debugger;
-    for (let j = 0; j < mineCoordinates.length; j++) {
-      xyCoordinates = mineCoordinates[j].split(",");
-      x = parseInt(xyCoordinates[0]);
-      y = parseInt(xyCoordinates[1]);
+    for (let i = 0; i < mineCoordinates.length; i++) {
+      let possibleLocales = [Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2)];
+      let xyCoordinates = mineCoordinates[i].split(",");
+      let x = parseInt(xyCoordinates[0]);
+      let y = parseInt(xyCoordinates[1]);
+
+      possibleLocales[0] = [x - 1, y - 1];
+      possibleLocales[1] = [x - 1, y];
+      possibleLocales[2] = [x - 1, y + 1];
+      possibleLocales[3] = [x, y + 1];
+      possibleLocales[4] = [x + 1, y + 1];
+      possibleLocales[5] = [x + 1, y];
+      possibleLocales[6] = [x + 1, y - 1];
+      possibleLocales[7] = [x, y - 1];
+
+      for (let j = 0; j < possibleLocales.length; j++) {
+        let rowColEnd = fullField.length;
+        let locale = possibleLocales[j];
+        if (locale[0] < 0) {
+          possibleLocales[j] = null;
+        } else if (locale[0] > rowColEnd - 1) {
+          possibleLocales[j] = null;
+        } else if (locale[1] < 0) {
+          possibleLocales[j] = null;
+        } else if (locale[1] > rowColEnd - 1) {
+          possibleLocales[j] = null;
+        }
+      }
+
+      for (let j = 0; j < possibleLocales.length; j++) {
+        let entry = possibleLocales[j];
+        debugger;
+        if (entry !== null) {
+          let fieldValue = fullField[entry[0]][entry[1]];
+          if (fieldValue === "X") {
+            continue;
+          }
+          if (fieldValue === null) {
+            fullField[entry[0]][entry[1]] = 1;
+          } else {
+            fullField[entry[0]][entry[1]]++;
+            debugger;
+          }
+        }
+      }
     }
     return fullField;
   }
