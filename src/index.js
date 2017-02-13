@@ -17,18 +17,13 @@ function Square(props) {
 }
 
 function Row(props) {
-  function renderSquare(value) {
-    return <Square value={value} onClick={() => this.props.onClick()}/>;
-  }
-
-  let row = props.row;
   return (
     <div className="board-row">
-      {renderSquare(row[0])}
-      {renderSquare(row[1])}
-      {renderSquare(row[2])}
-      {renderSquare(row[3])}
-      {renderSquare(row[4])}
+      <Square value={props.row[0]} onClick={() => props.onClick()}/>
+      <Square value={props.row[1]} onClick={() => props.onClick()}/>
+      <Square value={props.row[2]} onClick={() => props.onClick()}/>
+      <Square value={props.row[3]} onClick={() => props.onClick()}/>
+      <Square value={props.row[4]} onClick={() => props.onClick()}/>
     </div>
   )
 }
@@ -36,15 +31,13 @@ function Row(props) {
 class Board extends React.Component {
 
   render() {
-    debugger;
-    let field = this.props.field;
     return (
       <div className="board">
-        <Row row={field[0]} onClick={this.props.onClick()}/>
-        <Row row={field[1]} onClick={this.props.onClick()}/>
-        <Row row={field[2]} onClick={this.props.onClick()}/>
-        <Row row={field[3]} onClick={this.props.onClick()}/>
-        <Row row={field[4]} onClick={this.props.onClick()}/>
+        <Row row={this.props.field[0]} onClick={this.props.onClick()}/>
+        <Row row={this.props.field[1]} onClick={this.props.onClick()}/>
+        <Row row={this.props.field[2]} onClick={this.props.onClick()}/>
+        <Row row={this.props.field[3]} onClick={this.props.onClick()}/>
+        <Row row={this.props.field[4]} onClick={this.props.onClick()}/>
       </div>
     );
   }
@@ -87,6 +80,8 @@ class Game extends React.Component {
     }
     return randPicks;
   }
+
+  
 
   handleClick(i) {
 
