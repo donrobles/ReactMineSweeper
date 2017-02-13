@@ -17,18 +17,13 @@ function Square(props) {
 }
 
 function Row(props) {
-  function renderSquare(value) {
-    return <Square value={value} onClick={() => this.props.onClick()}/>;
-  }
-
-  let row = props.row;
   return (
     <div className="board-row">
-      {renderSquare(row[0])}
-      {renderSquare(row[1])}
-      {renderSquare(row[2])}
-      {renderSquare(row[3])}
-      {renderSquare(row[4])}
+      <Square id="col-0" value={props.row[0]} onClick={() => props.onClick()}/>
+      <Square id="col-1" value={props.row[1]} onClick={() => props.onClick()}/>
+      <Square id="col-2" value={props.row[2]} onClick={() => props.onClick()}/>
+      <Square id="col-3" value={props.row[3]} onClick={() => props.onClick()}/>
+      <Square id="col-4" value={props.row[4]} onClick={() => props.onClick()}/>
     </div>
   )
 }
@@ -36,43 +31,40 @@ function Row(props) {
 class Board extends React.Component {
 
   render() {
-    debugger;
-    let field = this.props.field;
     return (
       <div className="board">
-        <Row row={field[0]} onClick={this.props.onClick()}/>
-        <Row row={field[1]} onClick={this.props.onClick()}/>
-        <Row row={field[2]} onClick={this.props.onClick()}/>
-        <Row row={field[3]} onClick={this.props.onClick()}/>
-        <Row row={field[4]} onClick={this.props.onClick()}/>
+        <Row id="row-0" row={this.props.field[0]} onClick={this.props.onClick()}/>
+        <Row id="row-1" row={this.props.field[1]} onClick={this.props.onClick()}/>
+        <Row id="row-2" row={this.props.field[2]} onClick={this.props.onClick()}/>
+        <Row id="row-3" row={this.props.field[3]} onClick={this.props.onClick()}/>
+        <Row id="row-4" row={this.props.field[4]} onClick={this.props.onClick()}/>
       </div>
-    );
+    )
   }
 }
 
 class Game extends React.Component {
   constructor() {
     super();
-    //Create empty 5x5 array.
-    //NOTE: The array must be created this way because there must be a new array for each row.
-    let fullField = [
-      Array(5).fill(null),
-      Array(5).fill(null),
-      Array(5).fill(null),
-      Array(5).fill(null),
-      Array(5).fill(null)
-    ];
-    let mineCoordinates = this.mineCoords(), xyCoordinates;
-    for (let j = 0; j < mineCoordinates.length; j++) {
-      xyCoordinates = mineCoordinates[j].split(",");
-      let x = xyCoordinates[0];
-      let y = xyCoordinates[1];
-      fullField[x][y] = "X";
-    }
+    let fullField = this.generateField();
     this.state = {
       field: fullField,
     };
   }
+
+  generateField() {
+    //Create empty 5x5 array.
+    //NOTE: The array must be created this way because there must be a new array for each row.
+    let fullField = [Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null)];
+    let mineCoordinates = this.mineCoords(), xyCoordinates;
+    for (let j = 0; j < mineCoordinates.length; j++) {
+      xyCoordinates = mineCoordinates[j].split(",");
+      fullField[xyCoordinates[0]][xyCoordinates[1]] = "X";
+    }
+    fullField = this.mineIndicators(fullField, mineCoordinates);
+    return fullField;
+  }
+
 
   mineCoords() {
     let randPicks = Array(3).fill(null); //Create empty array
@@ -86,6 +78,56 @@ class Game extends React.Component {
       }
     }
     return randPicks;
+  }
+
+  mineIndicators(fullField, mineCoordinates) {
+    for (let i = 0; i < mineCoordinates.length; i++) {
+      let possibleLocales = [Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2)];
+      let xyCoordinates = mineCoordinates[i].split(",");
+      let x = parseInt(xyCoordinates[0]);
+      let y = parseInt(xyCoordinates[1]);
+
+      possibleLocales[0] = [x - 1, y - 1];
+      possibleLocales[1] = [x - 1, y];
+      possibleLocales[2] = [x - 1, y + 1];
+      possibleLocales[3] = [x, y + 1];
+      possibleLocales[4] = [x + 1, y + 1];
+      possibleLocales[5] = [x + 1, y];
+      possibleLocales[6] = [x + 1, y - 1];
+      possibleLocales[7] = [x, y - 1];
+
+      for (let j = 0; j < possibleLocales.length; j++) {
+        let rowColEnd = fullField.length;
+        let locale = possibleLocales[j];
+        if (locale[0] < 0) {
+          possibleLocales[j] = null;
+        } else if (locale[0] > rowColEnd - 1) {
+          possibleLocales[j] = null;
+        } else if (locale[1] < 0) {
+          possibleLocales[j] = null;
+        } else if (locale[1] > rowColEnd - 1) {
+          possibleLocales[j] = null;
+        }
+      }
+
+      for (let j = 0; j < possibleLocales.length; j++) {
+        let entry = possibleLocales[j];
+        debugger;
+        if (entry !== null) {
+          let fieldValue = fullField[entry[0]][entry[1]];
+          if (fieldValue === "X") {
+            continue;
+          }
+          if (fieldValue === null) {
+            fullField[entry[0]][entry[1]] = 1;
+          } else {
+            fullField[entry[0]][entry[1]]++;
+            debugger;
+          }
+        }
+      }
+    }
+    return fullField;
   }
 
   handleClick(i) {
