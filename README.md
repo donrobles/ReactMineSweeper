@@ -1,5 +1,5 @@
 ##Tutorial Link
-The tutorial I went through to learn about React can be found [here](https://facebook.github.io/react/tutorial/tutorial.html).
+This app is a continuation of the a [tutorial](https://facebook.github.io/react/tutorial/tutorial.html) I went through to learn about React.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
@@ -75,7 +75,7 @@ In order to build this project, you must have [_**NodeJS**_](https://nodejs.org/
 #### 1) Pull down the project into a directory.
 `cd` into the directory where you'll keep the project and run the following command...
 ```
-git clone https://github.com/readTheLine/TicTacToe-React-Tutorial.git
+git clone https://github.com/readTheLine/ReactMineSweeper.git
 ```
 
 #### 2) Download the dependencies.
