@@ -53,10 +53,11 @@ class Game extends React.Component {
   }
 
   generateField() {
+    let numberOfMines = 4;
     //Create empty 5x5 array.
     //NOTE: The array must be created this way because there must be a new array for each row.
     let fullField = [Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null)];
-    let mineCoordinates = this.mineCoords(), xyCoordinates;
+    let mineCoordinates = this.mineCoords(numberOfMines), xyCoordinates;
     for (let j = 0; j < mineCoordinates.length; j++) {
       xyCoordinates = mineCoordinates[j].split(",");
       fullField[xyCoordinates[0]][xyCoordinates[1]] = "X";
@@ -66,11 +67,11 @@ class Game extends React.Component {
   }
 
 
-  mineCoords() {
-    let randPicks = Array(3).fill(null); //Create empty array
+  mineCoords(numOfMines) {
+    let randPicks = Array(numOfMines).fill(null); //Create empty array
     let picked = 0;
     let xy = "";
-    while (picked < 3) {
+    while (picked < randPicks.length) {
       xy = (Math.floor(Math.random() * 5)) + "," + (Math.floor(Math.random() * 5));
       if (!randPicks.includes(xy)) { //Make sure the random number hasn't been picked.
         randPicks[picked] = xy; //Add random number to array of random numbers picked.
