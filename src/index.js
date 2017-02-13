@@ -113,7 +113,6 @@ class Game extends React.Component {
 
       for (let j = 0; j < possibleLocales.length; j++) {
         let entry = possibleLocales[j];
-        debugger;
         if (entry !== null) {
           let fieldValue = fullField[entry[0]][entry[1]];
           if (fieldValue === "X") {
@@ -123,7 +122,6 @@ class Game extends React.Component {
             fullField[entry[0]][entry[1]] = 1;
           } else {
             fullField[entry[0]][entry[1]]++;
-            debugger;
           }
         }
       }
