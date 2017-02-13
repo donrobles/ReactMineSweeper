@@ -16,26 +16,21 @@ function Square(props) {
   );
 }
 
-class Row extends React.Component {
-  /*Return the React Stateless Functional Component called 'Square'.
-   When returned, pass Square it's matching value in the 'squares' array of 'props' of Board.
-   Also, pass it a function to update the 'squares' array in the 'state' of Game.*/
-  renderSquare(value) {
+function Row(props) {
+  function renderSquare(value) {
     return <Square value={value} onClick={() => this.props.onClick()}/>;
   }
 
-  render() {
-    let row = this.props.row;
-    return (
-      <div className="board-row">
-        {this.renderSquare(row[0])}
-        {this.renderSquare(row[1])}
-        {this.renderSquare(row[2])}
-        {this.renderSquare(row[3])}
-        {this.renderSquare(row[4])}
-      </div>
-    )
-  }
+  let row = props.row;
+  return (
+    <div className="board-row">
+      {renderSquare(row[0])}
+      {renderSquare(row[1])}
+      {renderSquare(row[2])}
+      {renderSquare(row[3])}
+      {renderSquare(row[4])}
+    </div>
+  )
 }
 
 class Board extends React.Component {
