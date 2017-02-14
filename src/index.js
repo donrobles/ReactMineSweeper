@@ -57,23 +57,25 @@ class Game extends React.Component {
     //Create empty 5x5 array.
     //NOTE: The array must be created this way because there must be a new array for each row.
     let fullField = [Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null)];
-    let mineCoordinates = this.mineCoords(numberOfMines), xyCoordinates;
+    let mineCoordinates = this.getMineCoords(numberOfMines), xyCoordinates;
     for (let j = 0; j < mineCoordinates.length; j++) {
       xyCoordinates = mineCoordinates[j].split(",");
       fullField[xyCoordinates[0]][xyCoordinates[1]] = "X";
     }
-    fullField = this.mineIndicators(fullField, mineCoordinates);
+    fullField = this.addMineIndicators(fullField, mineCoordinates);
     return fullField;
   }
 
-
-  mineCoords(numOfMines) {
-    let randPicks = Array(numOfMines).fill(null); //Create empty array
+  /*
+   Pick the coordinates for the number of mines given.
+   */
+  getMineCoords(numOfMines) {
+    let randPicks = Array(numOfMines).fill(null); //Create empty array the size of the number of mines.
     let picked = 0;
     let xy = "";
     while (picked < randPicks.length) {
       xy = (Math.floor(Math.random() * 5)) + "," + (Math.floor(Math.random() * 5));
-      if (!randPicks.includes(xy)) { //Make sure the random number hasn't been picked.
+      if (!randPicks.includes(xy)) { //Make sure the random number hasn't already been picked.
         randPicks[picked] = xy; //Add random number to array of random numbers picked.
         picked++;
       }
@@ -81,38 +83,45 @@ class Game extends React.Component {
     return randPicks;
   }
 
-  mineIndicators(fullField, mineCoordinates) {
+  addMineIndicators(fullField, mineCoordinates) {
     for (let i = 0; i < mineCoordinates.length; i++) {
-      let possibleLocales = [Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2)];
+      let mineIndicators = [Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2)];
+      //Grab the first set of coordinates.
       let xyCoordinates = mineCoordinates[i].split(",");
       let x = parseInt(xyCoordinates[0]);
       let y = parseInt(xyCoordinates[1]);
+      let rowColEnd = fullField.length - 1;
 
-      possibleLocales[0] = [x - 1, y - 1];
-      possibleLocales[1] = [x - 1, y];
-      possibleLocales[2] = [x - 1, y + 1];
-      possibleLocales[3] = [x, y + 1];
-      possibleLocales[4] = [x + 1, y + 1];
-      possibleLocales[5] = [x + 1, y];
-      possibleLocales[6] = [x + 1, y - 1];
-      possibleLocales[7] = [x, y - 1];
+      //Do the arithmetic for each of the 8 squares around a mine.
+      mineIndicators[0] = [x - 1, y - 1];
+      mineIndicators[1] = [x - 1, y];
+      mineIndicators[2] = [x - 1, y + 1];
+      mineIndicators[3] = [x, y + 1];
+      mineIndicators[4] = [x + 1, y + 1];
+      mineIndicators[5] = [x + 1, y];
+      mineIndicators[6] = [x + 1, y - 1];
+      mineIndicators[7] = [x, y - 1];
 
-      for (let j = 0; j < possibleLocales.length; j++) {
-        let rowColEnd = fullField.length;
-        let locale = possibleLocales[j];
-        if (locale[0] < 0) {
-          possibleLocales[j] = null;
-        } else if (locale[0] > rowColEnd - 1) {
-          possibleLocales[j] = null;
-        } else if (locale[1] < 0) {
-          possibleLocales[j] = null;
-        } else if (locale[1] > rowColEnd - 1) {
-          possibleLocales[j] = null;
+      //Only check the 8 surrounding squares if X or Y are on the edge.
+      if (x === 0 || x === rowColEnd || y === 0 || y === rowColEnd) {
+        //Remove possible locales if they're out of the bounds of the grid.
+        for (let j = 0; j < mineIndicators.length; j++) {
+          let locale = mineIndicators[j];
+          if (locale[0] < 0) {
+            mineIndicators[j] = null;
+          } else if (locale[0] > rowColEnd) {
+            mineIndicators[j] = null;
+          } else if (locale[1] < 0) {
+            mineIndicators[j] = null;
+          } else if (locale[1] > rowColEnd) {
+            mineIndicators[j] = null;
+          }
         }
       }
 
-      for (let j = 0; j < possibleLocales.length; j++) {
-        let entry = possibleLocales[j];
+      //Go through the mineIndicators, incrementing the mine count as needed.
+      for (let j = 0; j < mineIndicators.length; j++) {
+        let entry = mineIndicators[j];
         if (entry !== null) {
           let fieldValue = fullField[entry[0]][entry[1]];
           if (fieldValue === "X") {
