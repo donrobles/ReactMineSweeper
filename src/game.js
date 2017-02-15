@@ -47,31 +47,25 @@ class Board extends React.Component {
 export class Game extends React.Component {
   constructor() {
     super();
-    let fullField = this.generateMineField();
+    let fullField = this.generateMineField(5, 4);
     this.state = {
       field: fullField,
     };
   }
 
-  generateMineField() {
-    let numberOfMines = 4, fieldSize = 5;
-    //Create empty 5x5 array.
-    //NOTE: The array must be created this way because there must be a new array for each row.
-    let fullField = this.generateField(fieldSize);
-    let mineCoordinates = this.getMineCoords(numberOfMines), xyCoordinates;
-    for (let j = 0; j < mineCoordinates.length; j++) {
-      xyCoordinates = mineCoordinates[j].split(",");
-      fullField[xyCoordinates[0]][xyCoordinates[1]] = "X";
-    }
-    fullField = this.addMineIndicators(fullField, mineCoordinates);
+  generateMineField(fieldSize, numberOfMines) {
+    let fullField = this.generateField(fieldSize); //Create an empty field.
+    let mineCoordinates = this.getMineCoords(numberOfMines); //Get random mine locations.
+    fullField = this.insertMines(fullField, mineCoordinates); //Insert mines into the field.
+    fullField = this.addMineIndicators(fullField, mineCoordinates); //Add mine indicators to field.
     return fullField;
   }
 
   generateField(fieldSize) {
     let baseArr = new Array(fieldSize).fill(null);
-    for (let row = 0; row < baseArr.length; row++) {
-      baseArr[row] = new Array(fieldSize).fill(null);
-    }
+    baseArr.forEach(function (row, index, array) {
+      array[index] = new Array(fieldSize).fill(null);
+    });
     return baseArr;
   }
 
@@ -90,6 +84,14 @@ export class Game extends React.Component {
       }
     }
     return randPicks;
+  }
+
+  insertMines(fullField, mineCoordinates) {
+    mineCoordinates.forEach(function (entry, index, array) {
+      let xyCoordinates = entry.split(",");
+      fullField[xyCoordinates[0]][xyCoordinates[1]] = "X";
+    });
+    return fullField;
   }
 
   addMineIndicators(fullField, mineCoordinates) {
@@ -114,35 +116,31 @@ export class Game extends React.Component {
       //Only check the 8 surrounding squares if X or Y are on the edge.
       if (x === 0 || x === rowColEnd || y === 0 || y === rowColEnd) {
         //Remove possible locales if they're out of the bounds of the grid.
-        for (let j = 0; j < mineIndicators.length; j++) {
-          let locale = mineIndicators[j];
+        mineIndicators.forEach(function (locale, index, array) {
           if (locale[0] < 0) {
-            mineIndicators[j] = null;
+            array[index] = null;
           } else if (locale[0] > rowColEnd) {
-            mineIndicators[j] = null;
+            array[index] = null;
           } else if (locale[1] < 0) {
-            mineIndicators[j] = null;
+            array[index] = null;
           } else if (locale[1] > rowColEnd) {
-            mineIndicators[j] = null;
+            array[index] = null;
           }
-        }
+        });
       }
 
-      //Go through the mineIndicators, incrementing the mine count as needed.
-      for (let j = 0; j < mineIndicators.length; j++) {
-        let entry = mineIndicators[j];
+      mineIndicators.forEach(function (entry, index, array) {
         if (entry !== null) {
           let fieldValue = fullField[entry[0]][entry[1]];
-          if (fieldValue === "X") {
-            continue;
-          }
-          if (fieldValue === null) {
-            fullField[entry[0]][entry[1]] = 1;
-          } else {
-            fullField[entry[0]][entry[1]]++;
+          if (fieldValue !== "X") {
+            if (fieldValue === null) {
+              fullField[entry[0]][entry[1]] = 1;
+            } else {
+              fullField[entry[0]][entry[1]]++;
+            }
           }
         }
-      }
+      });
     }
     return fullField;
   }
