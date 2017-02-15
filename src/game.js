@@ -7,7 +7,7 @@ import React from "react";
  This is a Stateless Functional Component.
  It exists purely to return something that requires no state.
  */
-export function Square(props) {
+function Square(props) {
   return (
     //When clicked, use the onClick() function passed in 'props' from Board.
     <button className="square" onClick={() => props.onClick()}>
@@ -17,7 +17,7 @@ export function Square(props) {
   );
 }
 
-export function Row(props) {
+function Row(props) {
   return (
     <div className="board-row">
       <Square id="col-0" value={props.row[0]} onClick={() => props.onClick()}/>
@@ -29,7 +29,7 @@ export function Row(props) {
   )
 }
 
-export class Board extends React.Component {
+class Board extends React.Component {
 
   render() {
     return (
@@ -47,17 +47,17 @@ export class Board extends React.Component {
 export class Game extends React.Component {
   constructor() {
     super();
-    let fullField = this.generateField();
+    let fullField = this.generateMineField();
     this.state = {
       field: fullField,
     };
   }
 
-  generateField() {
-    let numberOfMines = 4;
+  generateMineField() {
+    let numberOfMines = 4, fieldSize = 5;
     //Create empty 5x5 array.
     //NOTE: The array must be created this way because there must be a new array for each row.
-    let fullField = [Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null), Array(5).fill(null)];
+    let fullField = this.generateField(fieldSize);
     let mineCoordinates = this.getMineCoords(numberOfMines), xyCoordinates;
     for (let j = 0; j < mineCoordinates.length; j++) {
       xyCoordinates = mineCoordinates[j].split(",");
@@ -65,6 +65,14 @@ export class Game extends React.Component {
     }
     fullField = this.addMineIndicators(fullField, mineCoordinates);
     return fullField;
+  }
+
+  generateField(fieldSize) {
+    let baseArr = new Array(fieldSize).fill(null);
+    for (let row = 0; row < baseArr.length; row++) {
+      baseArr[row] = new Array(fieldSize).fill(null);
+    }
+    return baseArr;
   }
 
   /*
