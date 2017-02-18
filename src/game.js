@@ -4,8 +4,8 @@ import {Board} from "./board";
 
 export class Game extends React.Component {
   constructor() {
+    debugger;
     super();
-    this.updatedMineField = this.updatedMineField.bind(this);
     this.state = {
       rows: 20,
       columns: 20,
@@ -13,7 +13,7 @@ export class Game extends React.Component {
     };
   }
 
-  updatedMineField(rows, columns, mines) {
+  updateMineField(rows, columns, mines) {
     this.setState({
       rows: rows,
       columns: columns,
@@ -27,11 +27,10 @@ export class Game extends React.Component {
   }
 
   render() {
-    const field = this.state.field;
     return (
       <div className="game">
         <div className="game-board">
-          <Menu updateField={this.updatedMineField}/>
+          <Menu updateMineField={this.updateMineField.bind(this)}/>
           <Board rows={this.state.rows} columns={this.state.columns} mines={this.state.mines}
                  onClick={(i) => this.handleClick(i)}
           />

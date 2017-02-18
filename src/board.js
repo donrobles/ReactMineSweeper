@@ -35,7 +35,6 @@ export class Board extends React.Component {
 
   constructor(props) {
     super(props);
-    debugger;
     let rows = this.props.rows;
     let columns = this.props.columns;
     let mines = this.props.mines;
